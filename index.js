@@ -1,8 +1,35 @@
-const Discord = require("discord.js-selfbot-v13") // npm i discord.js-selfbot-v13 (required)
-const client = new Discord.Client({checkUpdate: false})
-const sphinx = require("sphinx-self");
-const keep_alive = require("./keep_alive.js");
+const express = require("express")
+const app = express();
 
-new sphinx.Core(client).leveling({ channel: "1220122451296387093", randomLetters: false, type: 'eng', time: 4000 }) //hover for options
+app.listen(() => console.log("I'm Ready To Work..! 24H"));
+app.get('/', (req, res) => {
+  res.send(`
+  <body>
+  <center><h1>Bot 24H ON!</h1></center
+  </body>`)
+});
 
-client.login(process.env.TOKEN) //Not saved.
+const { Client } = require('discord.js-selfbot-v13');
+const client = new Client(); 
+
+client.on('ready', async () => {
+  console.log(`${client.user.username} is ready!`);
+})
+
+const { joinVoiceChannel } = require('@discordjs/voice');
+client.on('ready', () => {
+    
+    setInterval( async () => {
+    client.channels.fetch(process.env.channel) 
+     .then((channel) => { 
+      const VoiceConnection = joinVoiceChannel({
+       channelId: channel.id, 
+       guildId: channel.guild.id, 
+       adapterCreator: channel.guild.voiceAdapterCreator 
+       });
+    }).catch((error) => { return; });
+    }, 1000)
+}); 
+
+client.login(process.env.token);
+//هتروح على السيكريت و تكتب token و تححط توكن حسابك و تسوي كمان واحد بس ذي المره اسمه channel و تحط ايدي الروم الصوتي اللي تبي يتثبت فيها حسابك
